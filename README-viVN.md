@@ -1,28 +1,27 @@
-# Prelude
+# Mở đầu
 
 > Role models are important. <br/>
 > -- Officer Alex J. Murphy / RoboCop
 
-Mục tiêu của tài liệu này là tập hợp các best practices và style
-prescriptions khi phát triển Ruby on Rails 4. It là tài liệu bổ sung cho tài liệu huớng cộng đồng hiện có
-[Ruby coding style guide](https://github.com/bbatsov/ruby-style-guide).
+Mục tiêu của tài liệu này là tập hợp các cài đặt thực tế tốt nhất (best practice) và các quy định phong cách (style prescription) khi phát triển Ruby on Rails 4. Tài liệu này nhằm bổ sung cho tài liệu huớng cộng đồng hiện có về [Hướng dẫn Phong cách lập trình Ruby](https://github.com/bbatsov/ruby-style-guide).
 
 Một số lời khuyên duới đây chỉ phù hợp cho Rails 4.0+.
 
-Bạn có thể xuất phiên bản PDF hoặc HTML của tâi liệu này bằng
-[Transmuter](https://github.com/TechnoGate/transmuter).
+Bạn có thể xuất phiên bản PDF hoặc HTML của tâi liệu này bằng [Transmuter](https://github.com/TechnoGate/transmuter).
 
 Các bản dịch của tài liệu này hiện có trong các ngôn ngữ sau:
 
+* [Tiếng Anh](https://github.com/bbatsov/rails-style-guide)
 * [Tiếng Hoa Giản thể](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhCN.md)
 * [Tiếng Hoa Phồn thể](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhTW.md)
 * [Tiếng Nga](https://github.com/arbox/rails-style-guide/blob/master/README-ruRU.md)
 * [Thổ Nhĩ Kỳ](https://github.com/tolgaavci/rails-style-guide/blob/master/README-trTR.md)
-* [Nhật](https://github.com/satour/rails-style-guide/blob/master/README-jaJA.md)
+* [Tiếng Nhật](https://github.com/satour/rails-style-guide/blob/master/README-jaJA.md)
+* [Tiếng Việt](https://github.com/pnghai/rails-style-guide/blob/master/README-viVN.md)
 
 # Hướng dẫn Phong cách Lập trình Rails
 
-This Rails style guide khuyến nghị các best practices để các lập trình viên Rails có thể viết mã sao cho nguời khác có thể bảo trì được. Một style guide that reflects real-world usage gets used, and a style guide that holds to an ideal that has been rejected by the people it is supposed to help risks not getting used at all &ndash; no matter how good it is.
+Hướng dẫn phong cách lập trình Rails này khuyến nghị các cài đặt thực tế tốt nhất để các lập trình viên Rails có thể viết mã sao cho nguời khác có thể bảo trì được. Hướng dẫn phong cách nhằm phản ánh cách sử dụng quen thuộc các cài đặt trong thực tế, và hướng dẫn phong cách như vậy hướng đến một lý tưởng bị từ chối bởi những người mà nó nhắm tới để tránh các rủi ro xảy ra vốn không quen dùng &ndash; bất kể hướng dẫn tốt đến đâu (?).
 
 Tài liệu này được chia thành vài phần gồm các quy ước liên quan. Tác giả đã cố gắng thêm các giải thích đằng sau các quy định đó (nếu phần đó không có là vì nó quá hiển nhiên).
 
@@ -31,22 +30,22 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 ## Mục lục
 
 * [Configuration - Cấu hình](#configuration)
-* [Routing - định tuyến](#routing)
-* [Controller - Bộ điều khiển](#controllers)
-* [Model - Mô hình](#models)
+* [Routing - Định tuyến](#routing)
+* [Controller - Lớp điều khiển](#controllers)
+* [Model - Lớp Mô hình](#models)
 * [Migrations - Trộn nhập](#migrations)
-* [Views - Xem](#views)
+* [Views - L trình bày](#views)
 * [Internationalization- Quốc tế hóa](#internationalization)
-* [Assets-](#assets)
+* [Assets - Tài nguyên](#assets)
 * [Mailers - Gửi mail](#mailers)
 * [Bundler - Bộ đóng gói](#bundler)
 * [Flawed Gems](#flawed-gems)
 * [Managing processes - Quản lý tiến trình](#managing-processes)
 
-## Configuration - Cấu hình
+## Configuration - Cấu hình ## {#configuration}
 
 * <a name="config-initializers"></a>
-  đặt các mã khởi tạo tùy biến của bạn vào `config/initializers`. Mã trong phần khởi tạo được thực thi khi ứng dụng khởi động.
+  Đặt các mã khởi tạo tùy biến của bạn vào `config/initializers`. Mã trong phần khởi tạo được thực thi khi ứng dụng khởi động.
 <sup>[[link](#config-initializers)]</sup>
 
 * <a name="gem-initializers"></a>
@@ -54,152 +53,141 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 <sup>[[link](#gem-initializers)]</sup>
 
 * <a name="dev-test-prod-configs"></a>
-  Adjust accordingly the settings for development, test and production
-  environment (in the corresponding files under `config/environments/`)
+  Điều chỉnh các thiết lập cho các môi trường phát triển, kiểm thử, và triển khai (production) (trong các tập tin tương ứng ở thư mục `config/environments/`)
 <sup>[[link](#dev-test-prod-configs)]</sup>
 
-  * Mark additional assets for precompilation (if any):
+  * Đánh dấu các tài nguyên bổ sung để biên dịch sẵn (precompilation) (nếu có):
 
     ```Ruby
     # config/environments/production.rb
-    # Precompile additional assets (application.js, application.css,
-    #and all non-JS/CSS are already added)
+    # Biên dịch sẵn các tài nguyên phụ (application.js, application.css,
+    #cùng tất cả các tập tin phi-JS/CSS được thêm vào)
     config.assets.precompile += %w( rails_admin/rails_admin.css rails_admin/rails_admin.js )
     ```
 
 * <a name="app-config"></a>
-  Lưu cấu hình áp dụng cho mọi môi trường vào tập tin
-  `config/application.rb`.
+  Lưu cấu hình áp dụng cho mọi môi trường vào tập tin `config/application.rb`.
 <sup>[[link](#app-config)]</sup>
 
 * <a name="staging-like-prod"></a>
-  Tạo thêm môi trường `staging` gần resembles với
-  `production`.
+  Tạo thêm môi trường `staging` gần giống với `production`.
 <sup>[[link](#staging-like-prod)]</sup>
 
-## Routing - định tuyến
+## Routing - Định tuyến ## {#routing}
 
 * <a name="member-collection-routes"></a>
-  Khi bạn cần thêm nhiều hành động cho một tài nguyên RESTful (mà bạn có thực sự cần không vậy?) sử dụng tuyến `member` và `collection`.
-<sup>[[link](#member-collection-routes)]</sup>
+  Khi bạn cần thêm nhiều hành động cho một tài nguyên RESTful (mà bạn có thực sự cần không vậy?) sử dụng tuyến(route) `member` và `collection`.<sup>[[link](#member-collection-routes)]</sup>
 
-  ```Ruby
-  # xấu
-  get 'subscriptions/:id/unsubscribe'
-  resources :subscriptions
-
-  # tốt
-  resources :subscriptions do
+    ```Ruby
+    # xấu
+    get 'subscriptions/:id/unsubscribe'
+    resources :subscriptions
+    
+    # tốt
+    resources :subscriptions do
     get 'unsubscribe', on: :member
-  end
-
-  # xấu
-  get 'photos/search'
-  resources :photos
-
-  # tốt
-  resources :photos do
-    get 'search', on: :collection
-  end
-  ```
+    end
+    
+    # xấu
+    get 'photos/search'
+    resources :photos
+    
+    # tốt
+    resources :photos do
+        get 'search', on: :collection
+    end
+    ```
 
 * <a name="many-member-collection-routes"></a>
-  If you need to define multiple `member/collection` routes use the
-  alternative block syntax.
+  Nếu bạn cần định nghĩa nhiều tuyến `member/collection` cùng lúc, nên thay thế bằng cú pháp khối.
 <sup>[[link](#many-member-collection-routes)]</sup>
 
-  ```Ruby
-  resources :subscriptions do
-    member do
-      get 'unsubscribe'
-      # more routes
-    end
-  end
+```Ruby
+resources :subscriptions do
+member do
+  get 'unsubscribe'
+  # nhiều tuyến nữa
+end
+end
 
-  resources :photos do
-    collection do
-      get 'search'
-      # more routes
-    end
-  end
-  ```
+resources :photos do
+collection do
+  get 'search'
+  # nhiều tuyến nữa
+end
+end
+```
 
 * <a name="nested-routes"></a>
-  Sử dụng các route (tuyến) lồng nhau để express quan hệ giữa các ActiveRecord model tốt hơn.
+  Sử dụng các tuyến lồng nhau(nested routes) để diễn tả quan hệ giữa các mô hình (model) ActiveRecord tốt hơn.
 <sup>[[link](#nested-routes)]</sup>
 
-  ```Ruby
-  class Post < ActiveRecord::Base
+```Ruby
+class Post < ActiveRecord::Base
     has_many :comments
-  end
+end
 
-  class Comments < ActiveRecord::Base
+class Comments < ActiveRecord::Base
     belongs_to :post
-  end
+end
 
-  # routes.rb
-  resources :posts do
+# routes.rb
+resources :posts do
     resources :comments
-  end
-  ```
+end
+```
 
 * <a name="namespaced-routes"></a>
-  Use namespaced routes to group related actions.
+  Dùng các tuyến theo tên dành riêng (namespaced route) để gom nhóm các hành động liên quan.
 <sup>[[link](#namespaced-routes)]</sup>
 
   ```Ruby
   namespace :admin do
-    # Directs /admin/products/* to Admin::ProductsController
+    # Điều hướng /admin/products/* đến Admin::ProductsController
     # (app/controllers/admin/products_controller.rb)
     resources :products
   end
   ```
 
 * <a name="no-wild-routes"></a>
-  Never use the legacy wild controller route. This route will make all actions
-  in every controller accessible via GET requests.
+  Không bao giờ dùng legacy wild controller route. Tuyến này sẽ khiến mọi hành động trong từng bộ điều khiển đều truy cập được qua các GET request.
 <sup>[[link](#no-wild-routes)]</sup>
 
   ```Ruby
-  # very bad
+  # kinh khủng khiếp
   match ':controller(/:action(/:id(.:format)))'
   ```
 
 * <a name="no-match-routes"></a>
-  Don't use `match` to define any routes unless there is need to map multiple request types among `[:get, :post, :patch, :put, :delete]` to a single action using `:via` option.
+  Đừng dùng `match` để định nghĩa bất cứ tuyến nào trừ phi cần phải ánh xạ nhiều kiểu request cùng lúc trong số `[:get, :post, :patch, :put, :delete]` đến một hành vi đơn thuần sử dụng tùy chọn `:via`.
 <sup>[[link](#no-match-routes)]</sup>
 
-## Controllers
+## Controllers - Lớp điều khiển ## {#controllers}
 
 * <a name="skinny-controllers"></a>
-  Keep the controllers skinny - they should only retrieve data for the view
-  layer and shouldn't contain any business logic (all the business logic
-  should naturally reside in the model).
+  Giữ các lớp điều khiển thật gọn - chúng chỉ nên lấy dữ liệu cho tầng view và không nên chứa bất cứ logic nghiệp vụ nào (mọi logic nghiệp vụ nên nằm tự nhiên trong mô hình).
 <sup>[[link](#skinny-controllers)]</sup>
 
 * <a name="one-method"></a>
-  Each controller action should (ideally) invoke only one method other than an
-  initial find or new.
+  Từng hành động (action) trong lớp điều khiển nên (về mặt lý tưởng) gọi chỉ một phương thức khác ngoài một phương thức khởi tạo : tìm hoặc tạo mới.
 <sup>[[link](#one-method)]</sup>
 
 * <a name="shared-instance-variables"></a>
-  Share no more than two instance variables between a controller and a view.
+  Chia sẻ không quá hơn 2 biến thực thể giữa một lớp điều khiển và một lớp trình bày.
 <sup>[[link](#shared-instance-variables)]</sup>
 
-## Models
+## Models - Lớp mô hình ## {#models}
 
 * <a name="model-classes"></a>
-  Introduce non-ActiveRecord model classes freely.
+  Cứ thoải mái tạo các lớp mô hình phi-ActiveRecord.
 <sup>[[link](#model-classes)]</sup>
 
 * <a name="meaningful-model-names"></a>
-  Name the models with meaningful (but short) names without abbreviations.
+  Đặt tên các lớp mô hình bằng các tên ngắn có ý nghĩa và không chứa các chữ viết tắt.
 <sup>[[link](#meaningful-model-names)]</sup>
 
 * <a name="activeattr-gem"></a>
-  If you need model objects that support ActiveRecord behavior(like
-  validation) use the [ActiveAttr](https://github.com/cgriego/active_attr)
-  gem.
+  Nếu bạn cần các đối tượng thuộc lớp mô hình hỗ trợ hành vi của ActiveRecord (như là xác thực), nên sử dụng gem [ActiveAttr](https://github.com/cgriego/active_attr).
 <sup>[[link](#activeattr-gem)]</sup>
 
   ```Ruby
@@ -219,18 +207,17 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   end
   ```
 
-  For a more complete example refer to the
-  [RailsCast on the subject](http://railscasts.com/episodes/326-activeattr).
+  Xem ví dụ đầy đủ hơn tại 
+  [RailsCast về đề tài này](http://railscasts.com/episodes/326-activeattr).
 
 ### ActiveRecord
 
 * <a name="keep-ar-defaults"></a>
-  Avoid altering ActiveRecord defaults (table names, primary key, etc) unless
-  you have a very good reason (like a database that's not under your control).
+  Tránh thay đổi các mặc định của ActiveRecord (các tên bảng, khóa chính, v.v...) trừ phi bạn có một lý do rất tốt (như là một cơ sở dữ liệu mà bạn không có quyền kiểm soát).
 <sup>[[link](#keep-ar-defaults)]</sup>
 
   ```Ruby
-  # xấu - don't do this if you can modify the schema
+  # xấu - đừng làm điều dưới đây nếu bạn có thể thay đổi schema
   class Transaction < ActiveRecord::Base
     self.table_name = 'order'
     ...
@@ -238,52 +225,50 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="macro-style-methods"></a>
-  Group macro-style methods (`has_many`, `validates`, etc) in the beginning of
-  the class definition.
+  Nhóm các phương thức kiểu macro (`has_many`, `validates`, v.v...) vào đầu phần định nghĩa lớp đối tượng.
 <sup>[[link](#macro-style-methods)]</sup>
 
   ```Ruby
   class User < ActiveRecord::Base
-    # keep the default scope first (if any)
+    # sử dụng tầm vực mặc định trước tiên (nếu có)
     default_scope { where(active: true) }
 
-    # constants come up next
+    # kế tiếp là khai báo hằng
     GENDERS = %w(male female)
 
-    # afterwards we put attr related macros
+    # sau đó là đặt các macro liên quan đến attr
     attr_accessor :formatted_date_of_birth
 
     attr_accessible :login, :first_name, :last_name, :email, :password
 
-    # followed by association macros
+    # theo sau là các macros về các quan hệ nối kết
     belongs_to :country
 
     has_many :authentications, dependent: :destroy
 
-    # and validation macros
+    # rồi đến các macro xác thực
     validates :email, presence: true
     validates :username, presence: true
     validates :username, uniqueness: { case_sensitive: false }
     validates :username, format: { with: /\A[A-Za-z][A-Za-z0-9._-]{2,19}\z/ }
     validates :password, format: { with: /\A\S{8,128}\z/, allow_nil: true}
 
-    # next we have callbacks
+    # rồi khai báo các callback
     before_save :cook
     before_save :update_username_lower
 
-    # other macros (like devise's) should be placed after the callbacks
+    # các macro khác (như của devise) nên đặt sau các callback
 
     ...
   end
   ```
 
 * <a name="has-many-through"></a>
-  Prefer `has_many :through` to `has_and_belongs_to_many`. Using `has_many
-  :through` allows additional attributes and validations on the join model.
+  Dùng `has_many :through` thay cho `has_and_belongs_to_many`. Sử dụng `has_many :through` cho phép các thuộc tính và xác thực phụ hoạt động trên lớp mô hình đi cùng (join model).
 <sup>[[link](#has-many-through)]</sup>
 
   ```Ruby
-  # not so good - using has_and_belongs_to_many
+  # không hay lắm - dùng has_and_belongs_to_many
   class User < ActiveRecord::Base
     has_and_belongs_to_many :groups
   end
@@ -292,7 +277,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
     has_and_belongs_to_many :users
   end
 
-  # prefered way - using has_many :through
+  # cách tốt hơn - dùng has_many :through
   class User < ActiveRecord::Base
     has_many :memberships
     has_many :groups, through: :memberships
@@ -310,7 +295,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="read-attribute"></a>
-  Prefer `self[:attribute]` over `read_attribute(:attribute)`.
+  Dùng `self[:attribute]` thay cho `read_attribute(:attribute)`.
 <sup>[[link](#read-attribute)]</sup>
 
   ```Ruby
@@ -326,7 +311,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="write-attribute"></a>
-  Prefer `self[:attribute] = value` over `write_attribute(:attribute, value)`.
+  Dùng `self[:attribute] = value` thay vì `write_attribute(:attribute, value)`.
 <sup>[[link](#write-attribute)]</sup>
 
   ```Ruby
@@ -342,8 +327,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="sexy-validations"></a>
-  Always use the new ["sexy"
-  validations](http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/).
+  Luôn dùng các [xác thực "sexy"](http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/) mới.
 <sup>[[link](#sexy-validations)]</sup>
 
   ```Ruby
@@ -355,8 +339,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="custom-validator-file"></a>
-  When a custom validation is used more than once or the validation is some
-  regular expression mapping, create a custom validator file.
+  Khi dùng nhiều lần xác thực tùy biến hay một xác thực là ánh xạ biểu thức hồi quy nào đó, hãy tạo một tập tin bộ xác thực tùy biến (custom validator file).
 <sup>[[link](#custom-validator-file)]</sup>
 
   ```Ruby
@@ -378,16 +361,15 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="app-validators"></a>
-  Keep custom validators under `app/validators`.
+  Giữ các bộ xác thực tùy biến trong thư mục `app/validators`.
 <sup>[[link](#app-validators)]</sup>
 
 * <a name="custom-validators-gem"></a>
-  Consider extracting custom validators to a shared gem if you're maintaining
-  several related apps or the validators are generic enough.
+  Cân nhắc trích xuất các bộ xác thực tùy biến ra một gem dùng chung nếu bạn đang bảo trì vài ứng dụng liên quan hoặc là các bộ xác thực ấy đủ chung.
 <sup>[[link](#custom-validators-gem)]</sup>
 
 * <a name="named-scopes"></a>
-  Use named scopes freely.
+  Thoải mái dùng các tầm vực đặt tên riêng.
 <sup>[[link](#named-scopes)]</sup>
 
   ```Ruby
@@ -400,10 +382,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="named-scope-class"></a>
-  When a named scope defined with a lambda and parameters becomes too
-  complicated, it is preferable to make a class method instead which serves the
-  same purpose of the named scope and returns an `ActiveRecord::Relation`
-  object. Arguably you can define even simpler scopes like this.
+  Khi tạo một tầm vực có tên riêng được định nghĩa với một lambda và các tham số trở nên quá phức tạp, thay vào đó ta nên tạo một phương thức thuộc về lớp đối tượng phục vụ cùng mục đích như tầm vực đã nói, và trả về một đối tượng `ActiveRecord::Relation`. Có thể cho rằng bạn định nghĩa một tầm vực đơn giản hơn như sau.
 <sup>[[link](#named-scope-class)]</sup>
 
   ```Ruby
@@ -415,7 +394,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
   ```
 
 * <a name="beware-update-attribute"></a>
-  Beware of the behavior of the
+  Coi chừng hành vi của 
   [`update_attribute`](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-update_attribute)
   method. It doesn't run the model validations (unlike `update_attributes`) and
   could easily corrupt the model state.
