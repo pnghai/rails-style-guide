@@ -42,7 +42,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 * [Flawed Gems](#flawed-gems)
 * [Managing processes - Quản lý tiến trình](#managing-processes)
 
-## Configuration - Cấu hình ## {#configuration}
+## <a id="configuration"></a>Configuration - Cấu hình
 
 * <a name="config-initializers"></a>
   Đặt các mã khởi tạo tùy biến của bạn vào `config/initializers`. Mã trong phần khởi tạo được thực thi khi ứng dụng khởi động.
