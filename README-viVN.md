@@ -29,7 +29,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 
 ## Mục lục
 
-* [Configuration - Cấu hình](#configuration)
+* [Configuration - Cấu hình](#configuration---c%E1%BA%A5u-h%C3%ACnh)
 * [Routing - Định tuyến](#routing)
 * [Controller - Lớp điều khiển](#controllers)
 * [Model - Lớp Mô hình](#models)
@@ -42,7 +42,7 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 * [Flawed Gems](#flawed-gems)
 * [Managing processes - Quản lý tiến trình](#managing-processes)
 
-## <a id="configuration"></a>Configuration - Cấu hình
+## Configuration - Cấu hình
 
 * <a name="config-initializers"></a>
   Đặt các mã khởi tạo tùy biến của bạn vào `config/initializers`. Mã trong phần khởi tạo được thực thi khi ứng dụng khởi động.
@@ -76,27 +76,28 @@ Tác giả không viết về các luật trên trời rơi xuống - hầu hế
 ## Routing - Định tuyến ## {#routing}
 
 * <a name="member-collection-routes"></a>
-  Khi bạn cần thêm nhiều hành động cho một tài nguyên RESTful (mà bạn có thực sự cần không vậy?) sử dụng tuyến(route) `member` và `collection`.<sup>[[link](#member-collection-routes)]</sup>
+  Khi bạn cần thêm nhiều hành động cho một tài nguyên RESTful (mà bạn có thực sự cần không vậy?) sử dụng tuyến(route) `member` và `collection`.
+<sup>[[link](#member-collection-routes)]</sup>
 
-    ```Ruby
-    # xấu
-    get 'subscriptions/:id/unsubscribe'
-    resources :subscriptions
-    
-    # tốt
-    resources :subscriptions do
-    get 'unsubscribe', on: :member
-    end
-    
-    # xấu
-    get 'photos/search'
-    resources :photos
-    
-    # tốt
-    resources :photos do
-        get 'search', on: :collection
-    end
-    ```
+```Ruby
+# xấu
+get 'subscriptions/:id/unsubscribe'
+resources :subscriptions
+
+# tốt
+resources :subscriptions do
+get 'unsubscribe', on: :member
+end
+
+# xấu
+get 'photos/search'
+resources :photos
+
+# tốt
+resources :photos do
+    get 'search', on: :collection
+end
+```
 
 * <a name="many-member-collection-routes"></a>
   Nếu bạn cần định nghĩa nhiều tuyến `member/collection` cùng lúc, nên thay thế bằng cú pháp khối.
@@ -124,16 +125,16 @@ end
 
 ```Ruby
 class Post < ActiveRecord::Base
-    has_many :comments
+  has_many :comments
 end
 
 class Comments < ActiveRecord::Base
-    belongs_to :post
+  belongs_to :post
 end
 
 # routes.rb
 resources :posts do
-    resources :comments
+  resources :comments
 end
 ```
 
@@ -394,21 +395,16 @@ end
   ```
 
 * <a name="beware-update-attribute"></a>
-  Coi chừng hành vi của 
+  Coi chừng hành vi của phương thức 
   [`update_attribute`](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-update_attribute)
-  method. It doesn't run the model validations (unlike `update_attributes`) and
-  could easily corrupt the model state.
+  . Phương thức này không gọi các xác thực của lớp mô hình (không như `update_attributes`) và có thể dễ dàng làm hỏng hiện trạng của lớp mô hình (model state).
 <sup>[[link](#beware-update-attribute)]</sup>
 
 * <a name="user-friendly-urls"></a>
-  Use user-friendly URLs. Show some descriptive attribute of the model in the URL
-  rather than its `id`.  There is more than one way to achieve this:
+  Dùng các URL thân thiện người dùng. Hiện một số thuộc tính mô tả của lớp mô hình trong URL thay vì `id` của nó. Có nhiều cách để thực hiện:
 <sup>[[link](#user-friendly-urls)]</sup>
 
-  * Override the `to_param` method of the model. This method is used by Rails
-    for constructing a URL to the object.  The default implementation returns
-    the `id` of the record as a String.  It could be overridden to include another
-    human-readable attribute.
+  * Nạp chồng phương thức `to_param` của lớp mô hình. Rails dùng phương thức này để dựng URL đến đối tượng thuộc về. Cài đặt mặc định trả về `id` của record như một biến kiểu String (chuỗi). Ta có thể nạo chồng nó để trả về thêm thuộc tính khác mà con người đọc được.
 
       ```Ruby
       class Person
@@ -418,12 +414,9 @@ end
       end
       ```
 
-  In order to convert this to a URL-friendly value, `parameterize` should be
-  called on the string. The `id` of the object needs to be at the beginning so
-  that it can be found by the `find` method of ActiveRecord.
+  Để chuyển dữ liệu trả về thành giá trị phù hợp cho URL , `parameterize` nên được gọi trên chuỗi. Phần `id` của đối tượng đó cần đặt ở đầu để dễ dàng được tìm thấy bởi phương thức `find` của ActiveRecord.
 
-  * Use the `friendly_id` gem. It allows creation of human-readable URLs by
-    using some descriptive attribute of the model instead of its `id`.
+  * Dùng gem `friendly_id`. Gem này cho phép tạo các URL con người đọc được bằng cách dùng một thuộc tính mô tả nào đó của lớp mô hình thay vì `id` của nó.
 
       ```Ruby
       class Person
@@ -432,15 +425,11 @@ end
       end
       ```
 
-  Check the [gem documentation](https://github.com/norman/friendly_id) for more
-  information about its usage.
+  Xem [tài liệu về gem](https://github.com/norman/friendly_id) để biết thêm chi tiết về cách dùng.
 
 * <a name="find-each"></a>
-  Use `find_each` to iterate over a collection of AR objects. Looping through a
-  collection of records from the database (using the `all` method, for example)
-  is very inefficient since it will try to instantiate all the objects at once.
-  In that case, batch processing methods allow you to work with the records in
-  batches, thereby greatly reducing memory consumption.
+  Dùng `find_each` để duyệt mảng (collection) các đối tượng thuộc lớp AR. Lặp qua mảng các record từ cơ sở dữ liệu (ví dụ, dùng phương thức `all`) vô cùng kém hiệu quả vì nó sẽ cố gắng khởi tạo tất cả đối tượng chung một lần.
+  Trong trường hợp đó, các phương thức xử lý bó (batch processing) cho phép bạn làm việc với các record thành từng bó, dó đó mà giảm thiểu tối đa tiêu thụ bộ nhớ.
 <sup>[[link](#find-each)]</sup>
 
 
@@ -465,12 +454,11 @@ end
   ```
 
 * <a name="before_destroy"></a>
-  Since [Rails creates callbacks for dependent
-  associations](https://github.com/rails/rails/issues/3458), always call
-  `before_destroy` callbacks that perform validation with `prepend: true`.
+  Vì [Rails tạo ra các callback dành cho các quan hệ kết tập phụ thuộc](https://github.com/rails/rails/issues/3458), luôn luôn gọi các callback
+  `before_destroy` thực hiện xác thực với `prepend: true`.
 
   ```Ruby
-  # xấu (roles will be deleted automatically even if super_admin? is true)
+  # xấu (các role sẽ tự động bị xóa thậm chí nếu super_admin? trả về true)
   has_many :roles, dependent: :destroy
 
   before_destroy :ensure_deletable
@@ -490,24 +478,22 @@ end
   ```
 
 
-## Migrations
+## Migrations - Trộn nhập
 
 * <a name="schema-version"></a>
-  Keep the `schema.rb` (or `structure.sql`) under version control.
+  Giữ `schema.rb` (hoặc `structure.sql`) trong version control (kiểm soát phiên bản).
 <sup>[[link](#schema-version)]</sup>
 
 * <a name="db-schema-load"></a>
-  Use `rake db:schema:load` instead of `rake db:migrate` to initialize an empty
-  database.
+  Dùng `rake db:schema:load` thay cho `rake db:migrate` để khởi tạo cơ sở dữ liệu trống.
 <sup>[[link](#db-schema-load)]</sup>
 
 * <a name="default-migration-values"></a>
-  Enforce default values in the migrations themselves instead of in the
-  application layer.
+  Enforce các giá trị mặc định trong các migration của chúng thay vì trong tầng ứng dụng.
 <sup>[[link](#default-migration-values)]</sup>
 
   ```Ruby
-  # xấu - application enforced default value
+  # xấu - ứng dụng enforced giá trị mặc định
   def amount
     self[:amount] or 0
   end
@@ -515,25 +501,21 @@ end
 
   While enforcing table defaults only in Rails is suggested by many
   Rails developers, it's an extremely brittle approach that
-  leaves your data vulnerable to many application bugs.  And you'll
-  have to consider the fact that most non-trivial apps share a
-  database with other applications, so imposing data integrity from
-  the Rails app is impossible.
+  leaves your data vulnerable to many application bugs. Và bạn sẽ phải cân nhắc thực tế rằng hầu hết các ứng dụng non-trivial chia sẻ một cơ sở dữ liệu với các ứng dụng khác, do vậy mà imposing toàn vẹn dữ liệu từ ứng dụng Rails là bất khả thi.
 
 * <a name="foreign-key-constraints"></a>
-  Enforce foreign-key constraints. While ActiveRecord does not support them
-  natively, there some great third-party gems like
-  [schema_plus](https://github.com/lomba/schema_plus) and
+  Enforce các ràng buộc khóa ngoại. Dù ActiveRecord không hỗ trợ chúng natively, có sẵn một số gem bên thứ ba  tuyệt vời như
+  [schema_plus](https://github.com/lomba/schema_plus) và
   [foreigner](https://github.com/matthuhiggins/foreigner).
 <sup>[[link](#foreign-key-constraints)]</sup>
 
 * <a name="change-vs-up-down"></a>
-  When writing constructive migrations (adding tables or columns),
-  use the `change` method instead of `up` and `down` methods.
+  Khi viết các constructive migration (thêm bảng hay cột),
+  dùng phương thức `change` thay vì cặp phương thức `up` và `down`.
 <sup>[[link](#change-vs-up-down)]</sup>
 
   ```Ruby
-  # the old way
+  # kiểu cũ
   class AddNameToPeople < ActiveRecord::Migration
     def up
       add_column :people, :name, :string
@@ -544,7 +526,7 @@ end
     end
   end
 
-  # the new prefered way
+  # kiểu mới ngon hơn
   class AddNameToPeople < ActiveRecord::Migration
     def change
       add_column :people, :name, :string
@@ -553,37 +535,33 @@ end
   ```
 
 * <a name="no-model-class-migrations"></a>
-  Don't use model classes in migrations. The model classes are constantly
-  evolving and at some point in the future migrations that used to work might
-  stop, because of changes in the models used.
+  Đừng dùng các lớp mô hình trong các migrations. Các lớp mô hình constantly evolving và một lúc nào đó trong tương lai, các migrations đang làm việc ổn có thể bị dừng, do các thay đổi trong các mô hình được dùng đến.
 <sup>[[link](#no-model-class-migrations)]</sup>
 
-## Views
+## Views - Lớp trình bày
 
 * <a name="no-direct-model-view"></a>
-  Never call the model layer directly from a view.
+  Không bao giờ gọi trực tiếp tầng mô hình từ một lớp trình bày.
 <sup>[[link](#no-direct-model-view)]</sup>
 
 * <a name="no-complex-view-formatting"></a>
-  Never make complex formatting in the views, export the formatting to a method
-  in the view helper or the model.
+  Không bao giờ tạo các định dạng phức tạp trong các lớp trình bày, xuất phần định dạng thành một phương thức trong helper của lớp trình bày hoặc trong lớp mô hình.
 <sup>[[link](#no-complex-view-formatting)]</sup>
 
 * <a name="partials"></a>
-  Mitigate code duplication by using partial templates and layouts.
+  Mitigate trùng lặp mã bằng cách dùng các template và layout partial.
 <sup>[[link](#partials)]</sup>
 
-## Internationalization
+## Internationalization - Quốc tế hóa
 
 * <a name="locale-texts"></a>
-  No strings or other locale specific settings should be used in the views,
-  models and controllers. These texts should be moved to the locale files in the
-  `config/locales` directory.
+  Không dùng bất cứ chuỗi hay các thiết lập được bản địa hóa trong các view,
+  model, hay controller nào. Những văn bản này nên được chuyển vào các tập tin bản địa hóa trong thư mục
+  `config/locales`.
 <sup>[[link](#locale-texts)]</sup>
 
 * <a name="translated-labels"></a>
-  When the labels of an ActiveRecord model need to be translated, use the
-  `activerecord` scope:
+  Khi cần dịch các nhãn của một lớp mô hình kế thừa từ ActiveRecord, dùng tầm vực `activerecord`:
 <sup>[[link](#translated-labels)]</sup>
 
   ```
@@ -596,20 +574,15 @@ end
           name: 'Full name'
   ```
 
-  Then `User.model_name.human` will return "Member" and
-  `User.human_attribute_name("name")` will return "Full name". These
-  translations of the attributes will be used as labels in the views.
+  Khi đó `User.model_name.human` sẽ trả về "Member" và
+  `User.human_attribute_name("name")` sẽ trả về "Full name". Phần dịch thuật cho các thuộc tính này sẽ được dùng như các nhãn trong các view.
 
 
 * <a name="organize-locale-files"></a>
-  Separate the texts used in the views from translations of ActiveRecord
-  attributes. Place the locale files for the models in a folder `models` and the
-  texts used in the views in folder `views`.
+  Tách các văn bản dùng trong các view khỏi phần dịch các thuộc tính của ActiveRecord. Đặt các tập tin bản địa hóa cho các lớp mô hình trong thư mục `models` và các văn bản dùng trong các view trong thư mục `views`.
 <sup>[[link](#organize-locale-files)]</sup>
 
-  * When organization of the locale files is done with additional directories,
-    these directories must be described in the `application.rb` file in order
-    to be loaded.
+  * Khi làm xong việc tổ chức các tập tin bản địa hóa thành các thư mục phụ, các thư mục này nên được khai báo trong tập tin `application.rb` để chương trình nạp chúng.
 
       ```Ruby
       # config/application.rb
@@ -617,17 +590,16 @@ end
       ```
 
 * <a name="shared-localization"></a>
-  Place the shared localization options, such as date or currency formats, in
-  files under the root of the `locales` directory.
+  Đặt các tùy chọn shared localization, như là thời gian hay định dạng tiền tệ, trong các tập tin nằm ngay gốc thư mục `locales`.
 <sup>[[link](#shared-localization)]</sup>
 
 * <a name="short-i18n"></a>
-  Use the short form of the I18n methods: `I18n.t` instead of `I18n.translate`
-  and `I18n.l` instead of `I18n.localize`.
+  Dùng dạng thu gọn của các phương thức thuộc lớp đối tượng I18n : `I18n.t` thay cho `I18n.translate`
+  và `I18n.l` thay cho `I18n.localize`.
 <sup>[[link](#short-i18n)]</sup>
 
 * <a name="lazy-lookup"></a>
-  Use "lazy" lookup for the texts used in views. Let's say we have the following
+  Dùng "lazy" tra cứu các văn bản dùng trong các view. Let's say we have the following
   structure:
 <sup>[[link](#lazy-lookup)]</sup>
 
@@ -638,75 +610,69 @@ end
         title: 'User details page'
   ```
 
-  The value for `users.show.title` can be looked up in the template
-  `app/views/users/show.html.haml` like this:
+  Giá trị cho `users.show.title` có thể được tra cứu trong template
+  `app/views/users/show.html.haml` như sau:
 
   ```Ruby
   = t '.title'
   ```
 
 * <a name="dot-separated-keys"></a>
-  Use the dot-separated keys in the controllers and models instead of specifying
-  the `:scope` option. The dot-separated call is easier to read and trace the
-  hierarchy.
+  Dùng các khóa phân cắt bằng dấu chấm trong các controller và model thay vì khai báo tùy chọn `:scope` . Các lời gọi phân cắt bởi dấu chấm dễ đọc và truy nguyên phân cấp hơn.
 <sup>[[link](#dot-separated-keys)]</sup>
 
   ```Ruby
-  # use this call
+  # dùng lời gọi này
   I18n.t 'activerecord.errors.messages.record_invalid'
 
-  # instead of this
+  # thay vì thế này
   I18n.t :record_invalid, :scope => [:activerecord, :errors, :messages]
   ```
 
 * <a name="i18n-guides"></a>
-  More detailed information about the Rails i18n can be found in the [Rails
-  Guides](http://guides.rubyonrails.org/i18n.html)
+  Tìm đọc chi tiết hơn về Rails i18n trong [Hướng dẫn Rails](http://guides.rubyonrails.org/i18n.html)
 <sup>[[link](#i18n-guides)]</sup>
 
-## Assets
+## Assets - Tài nguyên phụ
 
-Use the [assets pipeline](http://guides.rubyonrails.org/asset_pipeline.html) to leverage organization within
-your application.
+Dùng [assets pipeline](http://guides.rubyonrails.org/asset_pipeline.html) để leverage tổ chức bên trong ứng dụng của bạn.
 
 * <a name="reserve-app-assets"></a>
-  Reserve `app/assets` for custom stylesheets, javascripts, or images.
+  Dành `app/assets` cho các stylesheet, javascript, hoặc hình ảnh tùy biến.
 <sup>[[link](#reserve-app-assets)]</sup>
 
 * <a name="lib-assets"></a>
-  Use `lib/assets` for your own libraries, that doesn’t really fit into the
-  scope of the application.
+  Dùng `lib/assets` cho các thư viện của riêng bạn, không phù hợp với việc nằm trong tầm ứng dụng.
 <sup>[[link](#lib-assets)]</sup>
 
 * <a name="vendor-assets"></a>
-  Third party code such as [jQuery](http://jquery.com/) or
-  [bootstrap](http://twitter.github.com/bootstrap/) should be placed in
+  Mã của bên thứ ba như [jQuery](http://jquery.com/) hay
+  [bootstrap](http://twitter.github.com/bootstrap/) nên được đặt trong
   `vendor/assets`.
 <sup>[[link](#vendor-assets)]</sup>
 
 * <a name="gem-assets"></a>
-  When possible, use gemified versions of assets (e.g.
+  Cứ khi nào có thể, nên dùng bản gem hóa của các tài nguyên phụ (lấy ví dụ:
   [jquery-rails](https://github.com/rails/jquery-rails),
   [jquery-ui-rails](https://github.com/joliss/jquery-ui-rails),
   [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass),
   [zurb-foundation](https://github.com/zurb/foundation)).
 <sup>[[link](#gem-assets)]</sup>
 
-## Mailers
+## Mailers - Bộ gửi mail
 
 * <a name="mailer-name"></a>
-  Name the mailers `SomethingMailer`. Without the Mailer suffix it isn't
-  immediately apparent what's a mailer and which views are related to the
-  mailer.
+  Đặt tên các bộ gửi mail `SomethingMailer`. Không có đuôi Mailer it isn't
+  immediately apparent what's a mailer và view nào liên quan tới mailer đó.
 <sup>[[link](#mailer-name)]</sup>
 
 * <a name="html-plain-email"></a>
-  Provide both HTML and plain-text view templates.
+  Tạo cả 2 phiên bản HTML và văn bản thô cho view template.
 <sup>[[link](#html-plain-email)]</sup>
 
 * <a name="enable-delivery-errors"></a>
-  Enable errors raised on failed mail delivery in your development environment.
-  The errors are disabled by default.
+  Bật báo lỗi khi gửi mail không được trong môi trường phát triển (dev env).
+  Các lỗi này mặc định bị tắt.
 <sup>[[link](#enable-delivery-errors)]</sup>
 
   ```Ruby
@@ -716,9 +682,8 @@ your application.
   ```
 
 * <a name="local-smtp"></a>
-  Use a local SMTP server like
-  [Mailcatcher](https://github.com/sj26/mailcatcher) in the development
-  environment.
+  Dùng một server SMTP local như
+  [Mailcatcher](https://github.com/sj26/mailcatcher) trong môi trường dev.
 <sup>[[link](#local-smtp)]</sup>
 
   ```Ruby
@@ -732,7 +697,7 @@ your application.
   ```
 
 * <a name="default-hostname"></a>
-  Provide default settings for the host name.
+  Khai báo các thiết lập mặc định cho tên host.
 <sup>[[link](#default-hostname)]</sup>
 
   ```Ruby
@@ -747,23 +712,21 @@ your application.
   ```
 
 * <a name="url-not-path-in-email"></a>
-  If you need to use a link to your site in an email, always use the `_url`, not
-  `_path` methods. The `_url` methods include the host name and the `_path`
-  methods don't.
+  Nếu bạn cần dùng một liên kết đến website của bạn trong một email, luôn dùng `_url`, không phải phương thức `_path`. Phương thức `_url` chứa tên host còn phương thức`_path` thì không.
 <sup>[[link](#url-not-path-in-email)]</sup>
 
   ```Ruby
   # xấu
-  You can always find more info about this course
+  Bạn luôn có thể tìm thêm thông tin về khóa học này
   = link_to 'here', course_path(@course)
 
   # tốt
-  You can always find more info about this course
+  Bạn luôn có thể tìm thêm thông tin về khóa học này
   = link_to 'here', course_url(@course)
   ```
 
 * <a name="email-addresses"></a>
-  Format the from and to addresses properly. Use the following format:
+  Định dạng đúng phần địa chỉ gửi và nhận. Dùng định dạng sau đây:
 <sup>[[link](#email-addresses)]</sup>
 
   ```Ruby
@@ -772,8 +735,7 @@ your application.
   ```
 
 * <a name="delivery-method-test"></a>
-  Make sure that the e-mail delivery method for your test environment is set to
-  `test`:
+  Đảm bảo rằng phương thức gửi e-mail trong môi trường kiểm thử của bạn được thiết lập là `test`:
 <sup>[[link](#delivery-method-test)]</sup>
 
   ```Ruby
@@ -783,7 +745,7 @@ your application.
   ```
 
 * <a name="delivery-method-smtp"></a>
-  The delivery method for development and production should be `smtp`:
+  Phương thức gửi trong môi trường phát triển và sử dụng (development and production) nên là `smtp`:
 <sup>[[link](#delivery-method-smtp)]</sup>
 
   ```Ruby
@@ -793,30 +755,24 @@ your application.
   ```
 
 * <a name="inline-email-styles"></a>
-  When sending html emails all styles should be inline, as some mail clients
-  have problems with external styles. This however makes them harder to maintain
-  and leads to code duplication. There are two similar gems that transform the
-  styles and put them in the corresponding html tags:
-  [premailer-rails](https://github.com/fphilipe/premailer-rails) and
+  Khi gửi các email html, mọi style nên là inline, vì một số trình đọc mail có vấn đề với các external style. Tuy vậy, điều này làm cho code trở nên khó bảo trì hơn và dẫn tới trùng mã. Có 2 gem tương tự chuyển các style và đặt chúng vào các thẻ html tương ứng là:
+  [premailer-rails](https://github.com/fphilipe/premailer-rails) và
   [roadie](https://github.com/Mange/roadie).
 <sup>[[link](#inline-email-styles)]</sup>
 
 * <a name="background-email"></a>
-  Sending emails while generating page response should be avoided. It causes
-  delays in loading of the page and request can timeout if multiple email are
-  sent. To overcome this emails can be sent in background process with the help
-  of [sidekiq](https://github.com/mperham/sidekiq) gem.
+  Cần tránh gửi các email trong khi tạo các trang phản hồi. It causes
+  delays in loading of the page and request có thể bị timeout nếu nhiều mail được gửi đi cùng lúc. Để tránh điều này, các email có thể được gửi bằng các tiến trình ngầm với sự trợ giúp của gem [sidekiq](https://github.com/mperham/sidekiq).
 <sup>[[link](#background-email)]</sup>
 
-## Bundler
+## Bundler - Bộ đóng gói
 
 * <a name="dev-test-gems"></a>
-  Put gems used only for development or testing in the appropriate group in the
-  Gemfile.
+  Đặt các gem chỉ dùng trong môi trường phát triển hay kiểm thử thành các nhóm tương ứng trong Gemfile.
 <sup>[[link](#dev-test-gems)]</sup>
 
 * <a name="only-good-gems"></a>
-  Use only established gems in your projects. If you're contemplating on
+  Chỉ dùng các gem established trong các dự án của bạn. If you're contemplating on
   including some little-known gem you should do a careful review of its source
   code first.
 <sup>[[link](#only-good-gems)]</sup>
@@ -840,8 +796,7 @@ your application.
   end
   ```
 
-  To require the appropriate gems in the right environment, add the
-  following to `config/application.rb`:
+  Để yêu cầu các gem tương ứng với đúng môi trường lập trình, thêm vào tập tin `config/application.rb` như sau:
 
   ```Ruby
   platform = RUBY_PLATFORM.match(/(linux|darwin)/)[0].to_sym
@@ -849,47 +804,36 @@ your application.
   ```
 
 * <a name="gemfile-lock"></a>
-  Do not remove the `Gemfile.lock` from version control. This is not some
-  randomly generated file - it makes sure that all of your team members get the
-  same gem versions when they do a `bundle install`.
+  Không loại bỏ `Gemfile.lock` khỏi kiểm soát phiên bản (version control). Đấy không phải là file được tạo ngẫu nhiên - nó đảm bảo rằng tất cả thành viên trong đội của bạn có cùng các phiên bản gem khi thực hiện `bundle install`.
 <sup>[[link](#gemfile-lock)]</sup>
 
 ## Flawed Gems
 
-This is a list of gems that are either problematic or superseded by
-other gems. You should avoid using them in your projects.
+Sau đây là danh sách các gem hoặc là problematic hoặc superseded bởi các gem khác. Bạn nên tránh dùng chúng trong các dự án của mình.
 
-* [rmagick](http://rmagick.rubyforge.org/) - this gem is notorious for its
-  memory consumption. Use
-  [minimagick](https://github.com/probablycorey/mini_magick) instead.
+* [rmagick](http://rmagick.rubyforge.org/) - gem này is notorious vì tốn bộ nhớ quá nhiều. Thay vào đó dùng
+  [minimagick](https://github.com/probablycorey/mini_magick).
 
-* [autotest](http://www.zenspider.com/ZSS/Products/ZenTest/) - old solution for
-  running tests automatically. Far inferior to
-  [guard](https://github.com/guard/guard) and
+* [autotest](http://www.zenspider.com/ZSS/Products/ZenTest/) - giải pháp cũ để chạy test tự động. Far inferior to
+  [guard](https://github.com/guard/guard) và
   [watchr](https://github.com/mynyml/watchr).
 
-* [rcov](https://github.com/relevance/rcov) - code coverage tool, not compatible
-  with Ruby 1.9. Use [SimpleCov](https://github.com/colszowka/simplecov)
-  instead.
+* [rcov](https://github.com/relevance/rcov) - code coverage tool, không tương thích với Ruby 1.9. Thay vào đó dùng [SimpleCov](https://github.com/colszowka/simplecov).
 
-* [therubyracer](https://github.com/cowboyd/therubyracer) - the use of this gem
-  in production is strongly discouraged as it uses a very large amount of
-  memory. I'd suggest using `node.js` instead.
+* [therubyracer](https://github.com/cowboyd/therubyracer) - Dùng gem này trong môi trường vận hành thực tế strongly discouraged vì nó ăn tài nguyên khủng khiếp. Tác giả đề xuất dùng `node.js` thay thế.
 
-This list is also a work in progress. Please, let me know if you know other
-popular, but flawed gems.
+Danh sách này còn đang tiếp tục. Xin báo với tác giả nếu bạn biết những gem nổi tiếng, nhưng flawed khác.
 
-## Managing processes
+## Managing processes - Quản lý tiến trình
 
 * <a name="foreman"></a>
-  If your projects depends on various external processes use
-  [foreman](https://github.com/ddollar/foreman) to manage them.
+  Nếu các dự án của bạn phụ thuộc vào các chương trình bên ngoài khác, dùng 
+  [foreman](https://github.com/ddollar/foreman) để quản lý chúng.
 <sup>[[link](#foreman)]</sup>
 
-# Further Reading
+# Further Reading - Đọc thêm
 
-There are a few excellent resources on Rails style, that you should consider if
-you have time to spare:
+Có một số ích tài nguyên xuất sắc về phong cách lập trình Rails mà bạn nên đọc nếu có thời gian:
 
 * [The Rails 4 Way](http://www.amazon.com/The-Rails-Addison-Wesley-Professional-Ruby/dp/0321944275)
 * [Ruby on Rails Guides](http://guides.rubyonrails.org/)
@@ -898,36 +842,31 @@ you have time to spare:
 * [Everyday Rails Testing with RSpec](https://leanpub.com/everydayrailsrspec)
 * [Better Specs for RSpec](http://betterspecs.org)
 
-# Contributing
+# Contributing - Đóng góp
 
-Nothing written in this guide is set in stone. It's my desire to work together
-with everyone interested in Rails coding style, so that we could ultimately
-create a resource that will be beneficial to the entire Ruby community.
+Nothing written in this guide is set in stone. Đó là mong muốn của tác giả được làm việc cùng với những ai yêu thích phong cách lập trình Rails, để chúng ta có thể tạo ra một tài nguyên ultimately
+có lợi cho toàn cộng đồng Ruby.
 
-Feel free to open tickets or send pull requests with improvements. Thanks in
-advance for your help!
+Hãy thoải mái tạo các ticket hoặc gửi các pull request để phát triển thêm. Chân thành cảm ơn đóng góp của bạn!
 
-You can also support the project (and RuboCop) with financial contributions via
+Bạn cũng có thể hỗ trợ dự án (và RuboCop) với đóng góp tài chính thông qua
 [gittip](https://www.gittip.com/bbatsov).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+[![Hỗ trợ qua Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
 
 ## Làm sao để đóng góp?
 
-It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/rails-style-guide/blob/master/CONTRIBUTING.md).
+Dễ thôi, làm theo [hướng dẫn đóng góp](https://github.com/bbatsov/rails-style-guide/blob/master/CONTRIBUTING.md).
 
 # Giấy phép
 
 ![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
-This work is licensed under a [Creative Commons Attribution 3.0 Unported
+Công trình này được cấp phép theo [Creative Commons Attribution 3.0 Unported
 License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
 
-# Spread the Word
+# Chia sẻ 
 
-A community-driven style guide is of little use to a community that doesn't know
-about its existence. Tweet about the guide, share it with your friends and
-colleagues. Every comment, suggestion or opinion we get makes the guide just a
-little bit better. And we want to have the best possible guide, don't we?
+Một hướng dẫn phong cách lập trình hướng cộng đồng sẽ vô ích với cộng đồng nếu người ta không biết nó tồn tại. Xin tweet về nó, chia sẻ nó cho bạn bè mình và đồng nghiệp. Mỗi góp ý, phê bình hay quan điểm của bạn đều giúp chúng ta hoàn thiện hướng dẫn này ngày một tốt hơn. Và chẳng phải chúng ta muốn một hướng dẫn tốt nhất có thể đấy sao?
 
 Thân ái,<br/>
 [Bozhidar](https://twitter.com/bbatsov)
